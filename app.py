@@ -69,47 +69,85 @@ def run(img_dir):
     st.set_option("deprecation.showfileUploaderEncoding", False)
     idm = ImageDirManager(img_dir)
 
-    if "files" not in st.session_state:
-        st.session_state["files"] = idm.get_all_files()
-        st.session_state["annotation_files"] = idm.get_exist_annotation_files()
-        st.session_state["image_index"] = 0
-    else:
-        idm.set_all_files(st.session_state["files"])
-        idm.set_annotation_files(st.session_state["annotation_files"])
+    fileImg = idm.get_all_files()
+    fileAnnotati= idm.get_exist_annotation_files()
+    imageIndex = 0
+
+    #if "files" not in st.session_state:
+        #st.session_state["files"] = idm.get_all_files()
+        #st.session_state["annotation_files"] = idm.get_exist_annotation_files()
+        #st.session_state["image_index"] = 0
+    #else:
+        #if len files is < 1 then restat the app
+        #if len(st.session_state["files"]) < 1:
+            #st.experimental_rerun()
+        #idm.set_all_files(st.session_state["files"])
+        #idm.set_annotation_files(st.session_state["annotation_files"])
     
     def refresh():
-        st.session_state["files"] = idm.get_all_files()
-        st.session_state["annotation_files"] = idm.get_exist_annotation_files()
-        st.session_state["image_index"] = 0
+        #st.session_state["files"] = idm.get_all_files()
+        #st.session_state["annotation_files"] = idm.get_exist_annotation_files()
+        #st.session_state["image_index"] = 0
+        fileImg = idm.get_all_files()
+        fileAnnotati= idm.get_exist_annotation_files()
+        imageIndex = 0
 
     def next_image():
-        image_index = st.session_state["image_index"]
-        if image_index < len(st.session_state["files"]) - 1:
-            st.session_state["image_index"] += 1
+        #image_index = st.session_state["image_index"]
+        #if image_index < len(st.session_state["files"]) - 1:
+            #st.session_state["image_index"] += 1
+        #else:
+            #st.warning('This is the last image.')
+
+        image_index_new = imageIndex
+        if image_index_new < len(fileImg) - 1:
+            imageIndex += 1
         else:
-            st.warning('This is the last image.')
+            st.warning("Questa è l'ultima immagine")
+
 
     def previous_image():
-        image_index = st.session_state["image_index"]
-        if image_index > 0:
-            st.session_state["image_index"] -= 1
+        #image_index = st.session_state["image_index"]
+        #if image_index > 0:
+            #st.session_state["image_index"] -= 1
+        #else:
+            #st.warning('This is the first image.')
+
+        image_index_new = imageIndex
+        if image_index_new > 0:
+            imageIndex -= 1
         else:
-            st.warning('This is the first image.')
+            st.warning("Questa è la prima immagine")
+
+        
 
     def next_annotate_file():
-        image_index = st.session_state["image_index"]
-        next_image_index = idm.get_next_annotation_image(image_index)
-        if next_image_index:
-            st.session_state["image_index"] = idm.get_next_annotation_image(image_index)
+        #image_index = st.session_state["image_index"]
+        #next_image_index = idm.get_next_annotation_image(image_index)
+        #if next_image_index:
+            #st.session_state["image_index"] = idm.get_next_annotation_image(image_index)
+        #else:
+            #st.success(" 🎁 Tutte le immagini sono state Annotate 🎁")
+            #st.success(" 👈 Scarica il file xml con le annotazioni dal menu a destra 📥")
+            #st.balloons()
+
+
+        image_index_new = imageIndex
+        next_image_index_new = idm.get_next_annotation_image(image_index_new)
+        if next_image_index_new:
+            imageIndex = idm.get_next_annotation_image(image_index_new)
         else:
             st.success(" 🎁 Tutte le immagini sono state Annotate 🎁")
             st.success(" 👈 Scarica il file xml con le annotazioni dal menu a destra 📥")
             st.balloons()
-            #next_image() emoji frame: 
+            
 
     def go_to_image():
-        file_index = st.session_state["files"].index(st.session_state["file"])
-        st.session_state["image_index"] = file_index
+        #file_index = st.session_state["files"].index(st.session_state["file"])
+        #st.session_state["image_index"] = file_index
+
+        file_index_new = fileImg.index(fileImg)
+        imageIndex = file_index_new
 
     def dowload_annotations():
         refresh()
@@ -141,17 +179,14 @@ def run(img_dir):
                     pass
                 else:
                     os.remove("Annotazioni Intelligenza Artificiale Italia/"+file)
-                    #delete all session_state
-                    for key in st.session_state.keys():
-                        del st.session_state[key]
                     st.experimental_singleton.clear()
                     st.experimental_rerun() #restart app
 
 
 
     # Sidebar: show status
-    n_files = len(st.session_state["files"])
-    n_annotate_files = len(st.session_state["annotation_files"])
+    n_files = len(fileImg)
+    n_annotate_files = len(fileAnnotati)
     st.sidebar.write("🖼 Totale Immagini:", n_files)
     st.sidebar.write("🖼 Immagini Annotate:", n_annotate_files)
     st.sidebar.write("🖼 Immagini Rimanenti:", n_files - n_annotate_files)
@@ -161,8 +196,8 @@ def run(img_dir):
 
     st.sidebar.selectbox(
         "🖼 Immagini caricate",
-        st.session_state["files"],
-        index=st.session_state["image_index"],
+        fileImg,
+        index=imageIndex,
         on_change=go_to_image,
         key="file",
     )
@@ -191,7 +226,7 @@ def run(img_dir):
         return None
 
     # Main content: annotate images
-    img_file_name = idm.get_image(st.session_state["image_index"])
+    img_file_name = idm.get_image(imageIndex)
     img_path = os.path.join(img_dir, img_file_name)
     im = ImageManager(img_path)
     img = im.get_img()
@@ -202,8 +237,8 @@ def run(img_dir):
     def annotate():
         im.save_annotation()
         image_annotate_file_name = img_file_name.split(".")[0] + ".xml"
-        if image_annotate_file_name not in st.session_state["annotation_files"]:
-            st.session_state["annotation_files"].append(image_annotate_file_name)
+        if image_annotate_file_name not in fileAnnotati:
+            fileAnnotati.append(image_annotate_file_name)
         next_annotate_file()
         
 
