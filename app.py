@@ -15,7 +15,7 @@ st.write('<p style="text-align: center;font-size:15px;" > <bold>Crea annotazioni
 
 hide_st_style = """
 			<style>
-			#MainMenu {visibility: hidden;}
+			
 			footer {visibility: hidden;}
 			
             .css-184tjsw p {
