@@ -182,6 +182,11 @@ def run(img_dir):
     else:
         st.sidebar.info("📥 Annota tutte le immagini prima di scaricare le annotazioni ⚙️")
 
+    #if n_files == 0 pass and return None
+    if n_files == 0:
+        st.warning("Nessuna immagine caricata")
+        return None
+
     # Main content: annotate images
     img_file_name = idm.get_image(st.session_state["image_index"])
     img_path = os.path.join(img_dir, img_file_name)
