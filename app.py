@@ -141,6 +141,7 @@ def run(img_dir):
                     pass
                 else:
                     os.remove("Annotazioni Intelligenza Artificiale Italia/"+file)
+                    refresh()
 
 
 
