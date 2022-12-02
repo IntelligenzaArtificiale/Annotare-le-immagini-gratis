@@ -2,8 +2,8 @@ import base64
 import zipfile
 import streamlit as st
 import os
-from streamlit_img_label import st_img_label
-from streamlit_img_label.manage import ImageManager, ImageDirManager
+from streamlit_img_label_ita import st_img_label_ita
+from streamlit_img_label_ita.manage import ImageManager, ImageDirManager
 
 
 st.set_page_config(page_title="Annota gratis le tue immagini🖼", page_icon="🔍", layout='wide', initial_sidebar_state='auto')
@@ -15,9 +15,9 @@ st.write('<p style="text-align: center;font-size:15px;" > <bold>Crea annotazioni
 
 hide_st_style = """
 			<style>
-			
+			#MainMenu {visibility: hidden;}
 			footer {visibility: hidden;}
-			
+			header {visibility: hidden;}
             .css-184tjsw p {
                 word-break: break-word;
                 font-size: 25px;
@@ -134,15 +134,16 @@ def run(img_dir):
                 b64 = base64.b64encode(data).decode()
                 href = f'<a href="data:file/zip;base64,{b64}" download="Annotazioni Intelligenza Artificiale Italia.zip"> 👉  🎁Scarica Gratis le Annotazioni🎁 👈 </a>'
                 st.markdown(href, unsafe_allow_html=True)
-		
+            
             #delete all file in folder upload except Grazie.txt
             for file in os.listdir(img_dir):
                 if file.endswith(".txt"):
                     pass
                 else:
                     os.remove("Annotazioni Intelligenza Artificiale Italia/"+file)
-                    refresh()
-
+                    #delete all session_state
+                    for key in st.session_state.keys():
+                        del st.session_state[key]
 
 
 
@@ -194,7 +195,7 @@ def run(img_dir):
     img = im.get_img()
     resized_img = im.resizing_img()
     resized_rects = im.get_resized_rects()
-    rects = st_img_label(resized_img, box_color="red", rects=resized_rects)
+    rects = st_img_label_ita(resized_img, box_color="red", rects=resized_rects)
 
     def annotate():
         im.save_annotation()
@@ -221,6 +222,7 @@ def run(img_dir):
 
 if __name__ == "__main__":
   
+    uploaded_files = st.empty()
     # create a st.file_uploader to upload a multiple images
     uploaded_files = st.sidebar.file_uploader(
         "Carica le immagini da Annotare", type=["jpg", "png", "jpeg"], accept_multiple_files=True
@@ -232,7 +234,7 @@ if __name__ == "__main__":
             with open(os.path.join("Annotazioni Intelligenza Artificiale Italia", uploaded_file.name), "wb") as f:
                 f.write(uploaded_file.getbuffer())
         # if the folder not is empty, run the app
-        if len(os.listdir("Annotazioni Intelligenza Artificiale Italia")) > 1:
+        if len(os.listdir("Annotazioni Intelligenza Artificiale Italia")) > 0:
             css2 = """
             .exg6vvm0 {
                 display: none;
@@ -249,8 +251,5 @@ if __name__ == "__main__":
             st.markdown(f'<style>{css2}</style>', unsafe_allow_html=True)
             st.error("⚠️  Nessuna immagine caricata ⚠️")
             st.error("👈 Usa il menu a destra per caricare le immagini da annotare 🛑")
-    else:
-        st.error("⚠️  Nessuna immagine caricata ⚠️")
-        st.error("👈 Usa il menu a destra per caricare le immagini da annotare 🛑")
         
     
