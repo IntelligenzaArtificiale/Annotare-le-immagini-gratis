@@ -2,8 +2,8 @@ import base64
 import zipfile
 import streamlit as st
 import os
-from streamlit_img_label_ita import st_img_label_ita
-from streamlit_img_label_ita.manage import ImageManager, ImageDirManager
+from streamlit_img_label import st_img_label
+from streamlit_img_label.manage import ImageManager, ImageDirManager
 
 
 st.set_page_config(page_title="Annota gratis le tue immagini🖼", page_icon="🔍", layout='wide', initial_sidebar_state='auto')
@@ -194,7 +194,7 @@ def run(img_dir):
     img = im.get_img()
     resized_img = im.resizing_img()
     resized_rects = im.get_resized_rects()
-    rects = st_img_label_ita(resized_img, box_color="red", rects=resized_rects)
+    rects = st_img_label(resized_img, box_color="red", rects=resized_rects)
 
     def annotate():
         im.save_annotation()
