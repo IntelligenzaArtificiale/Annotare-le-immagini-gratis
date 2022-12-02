@@ -271,7 +271,7 @@ if __name__ == "__main__":
             with open(os.path.join("Annotazioni Intelligenza Artificiale Italia", uploaded_file.name), "wb") as f:
                 f.write(uploaded_file.getbuffer())
         # if the folder not is empty, run the app
-        if len(os.listdir("Annotazioni Intelligenza Artificiale Italia")) > 0:
+        if len(os.listdir("Annotazioni Intelligenza Artificiale Italia")) > 1:
             css2 = """
             .exg6vvm0 {
                 display: none;
