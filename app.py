@@ -145,6 +145,7 @@ def run(img_dir):
                     for key in st.session_state.keys():
                         del st.session_state[key]
                     st.experimental_singleton.clear()
+                    st.experimental_rerun() #restart app
 
 
 
