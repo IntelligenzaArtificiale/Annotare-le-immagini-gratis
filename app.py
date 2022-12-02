@@ -17,7 +17,7 @@ hide_st_style = """
 			<style>
 			#MainMenu {visibility: hidden;}
 			footer {visibility: hidden;}
-			header {visibility: hidden;}
+			
             .css-184tjsw p {
                 word-break: break-word;
                 font-size: 25px;
