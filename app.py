@@ -134,6 +134,14 @@ def run(img_dir):
                 b64 = base64.b64encode(data).decode()
                 href = f'<a href="data:file/zip;base64,{b64}" download="Annotazioni Intelligenza Artificiale Italia.zip"> 👉  🎁Scarica Gratis le Annotazioni🎁 👈 </a>'
                 st.markdown(href, unsafe_allow_html=True)
+		
+            #delete all file in folder upload except Grazie.txt
+            for file in os.listdir(img_dir):
+                if file.endswith(".txt"):
+                    pass
+                else:
+                    os.remove("Annotazioni Intelligenza Artificiale Italia/"+file)
+
 
 
 
