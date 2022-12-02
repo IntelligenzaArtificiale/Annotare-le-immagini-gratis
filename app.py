@@ -242,6 +242,12 @@ if __name__ == "__main__":
             """
             st.markdown(f'<style>{css2}</style>', unsafe_allow_html=True)
             run("Annotazioni Intelligenza Artificiale Italia")
+            css2 = """
+            .exg6vvm0 {
+                display: block;
+            }
+            """
+            st.markdown(f'<style>{css2}</style>', unsafe_allow_html=True)
         else:
             css2 = """
             .exg6vvm0 {
