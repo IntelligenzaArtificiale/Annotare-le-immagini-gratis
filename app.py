@@ -207,7 +207,6 @@ def run(img_dir):
 
 if __name__ == "__main__":
   
-    uploaded_files = st.empty()
     # create a st.file_uploader to upload a multiple images
     uploaded_files = st.sidebar.file_uploader(
         "Carica le immagini da Annotare", type=["jpg", "png", "jpeg"], accept_multiple_files=True
@@ -236,5 +235,8 @@ if __name__ == "__main__":
             st.markdown(f'<style>{css2}</style>', unsafe_allow_html=True)
             st.error("⚠️  Nessuna immagine caricata ⚠️")
             st.error("👈 Usa il menu a destra per caricare le immagini da annotare 🛑")
+    else:
+        st.error("⚠️  Nessuna immagine caricata ⚠️")
+        st.error("👈 Usa il menu a destra per caricare le immagini da annotare 🛑")
         
     
