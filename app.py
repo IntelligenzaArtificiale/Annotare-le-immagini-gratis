@@ -64,7 +64,7 @@ hide_st_style = """
 st.markdown(hide_st_style, unsafe_allow_html=True)
 
 
-
+@st.experimental_singleton
 def run(img_dir):
     st.set_option("deprecation.showfileUploaderEncoding", False)
     idm = ImageDirManager(img_dir)
@@ -144,6 +144,7 @@ def run(img_dir):
                     #delete all session_state
                     for key in st.session_state.keys():
                         del st.session_state[key]
+                    st.experimental_singleton.clear()
 
 
 
