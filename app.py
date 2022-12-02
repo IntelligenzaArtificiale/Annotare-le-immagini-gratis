@@ -227,7 +227,8 @@ def run(img_dir):
         st.button(label="✅ Salva e passa all'immagine successiva 👉🖼", on_click=annotate)
 
 if __name__ == "__main__":
-  
+    st.experimental_singleton.clear()
+    st.experimental_rerun() #restart app
     uploaded_files = st.empty()
     # create a st.file_uploader to upload a multiple images
     uploaded_files = st.sidebar.file_uploader(
