@@ -71,7 +71,7 @@ st.markdown(hide_st_style, unsafe_allow_html=True)
 with st.sidebar.form("my-form", clear_on_submit=True):
     with st.expander("📂 Carica le tue immagini", expanded=True):
         uploaded_files = st.file_uploader(
-        "", type=["jpg", "png", "jpeg"], accept_multiple_files=True
+        ".", type=["jpg", "png", "jpeg"], accept_multiple_files=True
             )
     submitted = st.form_submit_button("Carica le Immagini 🖼")
 
