@@ -210,17 +210,16 @@ if len(os.listdir("Annotazioni Intelligenza Artificiale Italia")) > 1:
     st.sidebar.button(label="📥 Scarica le annotazioni 📥", on_click=dowload_annotations)
     st.sidebar.button(label="🗑 Elimina tutto 🗑", on_click=delete_annotations)
 
-    try:
-        # Main content: annotate images
-        img_file_name = idm.get_image(st.session_state["image_index"])
-        img_path = os.path.join("Annotazioni Intelligenza Artificiale Italia", img_file_name)
-        im = ImageManager(img_path)
-        img = im.get_img()
-        resized_img = im.resizing_img()
-        resized_rects = im.get_resized_rects()
-        rects = st_img_label(resized_img, box_color="red", rects=resized_rects)
-    except Exception as e:
-        st.error("Qualcosa è andato storto. Prova a ricaricare la pagina.")
+    
+    # Main content: annotate images
+    img_file_name = idm.get_image(st.session_state["image_index"])
+    img_path = os.path.join("Annotazioni Intelligenza Artificiale Italia", img_file_name)
+    im = ImageManager(img_path)
+    img = im.get_img()
+    resized_img = im.resizing_img()
+    resized_rects = im.get_resized_rects()
+    rects = st_img_label(resized_img, box_color="red", rects=resized_rects)
+    
 
     def annotate():
         im.save_annotation()
