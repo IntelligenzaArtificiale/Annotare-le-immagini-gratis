@@ -210,38 +210,42 @@ if len(os.listdir("Annotazioni Intelligenza Artificiale Italia")) > 1:
     st.sidebar.button(label="📥 Scarica le annotazioni 📥", on_click=dowload_annotations)
     st.sidebar.button(label="🗑 Elimina tutto 🗑", on_click=delete_annotations)
 
+    try:
+        # Main content: annotate images
+        img_file_name = idm.get_image(st.session_state["image_index"])
+        img_path = os.path.join("Annotazioni Intelligenza Artificiale Italia", img_file_name)
+        im = ImageManager(img_path)
+        img = im.get_img()
+        resized_img = im.resizing_img()
+        resized_rects = im.get_resized_rects()
+        rects = st_img_label(resized_img, box_color="red", rects=resized_rects)
+        
+
+        def annotate():
+            im.save_annotation()
+            image_annotate_file_name = img_file_name.split(".")[0] + ".xml"
+            if image_annotate_file_name not in st.session_state["annotation_files"]:
+                st.session_state["annotation_files"].append(image_annotate_file_name)
+            next_annotate_file()
+
+        if rects:
+            preview_imgs = im.init_annotation(rects)
+
+            for i, prev_img in enumerate(preview_imgs):
+                prev_img[0].thumbnail((200, 200))
+                col1, col2 = st.columns(2)
+                with col1:
+                    col1.image(prev_img[0])
+                with col2:
+                    select_label = col2.text_input("Etichetta", key=f"label_{i}")
+
+                    im.set_annotation(i, select_label)
+
+            st.button(label="✅ Salva e passa all'immagine successiva 👉🖼", on_click=annotate)
     
-    # Main content: annotate images
-    img_file_name = idm.get_image(st.session_state["image_index"])
-    img_path = os.path.join("Annotazioni Intelligenza Artificiale Italia", img_file_name)
-    im = ImageManager(img_path)
-    img = im.get_img()
-    resized_img = im.resizing_img()
-    resized_rects = im.get_resized_rects()
-    rects = st_img_label(resized_img, box_color="red", rects=resized_rects)
-    
-
-    def annotate():
-        im.save_annotation()
-        image_annotate_file_name = img_file_name.split(".")[0] + ".xml"
-        if image_annotate_file_name not in st.session_state["annotation_files"]:
-            st.session_state["annotation_files"].append(image_annotate_file_name)
-        next_annotate_file()
-
-    if rects:
-        preview_imgs = im.init_annotation(rects)
-
-        for i, prev_img in enumerate(preview_imgs):
-            prev_img[0].thumbnail((200, 200))
-            col1, col2 = st.columns(2)
-            with col1:
-                col1.image(prev_img[0])
-            with col2:
-                select_label = col2.text_input("Etichetta", key=f"label_{i}")
-
-                im.set_annotation(i, select_label)
-
-        st.button(label="✅ Salva e passa all'immagine successiva 👉🖼", on_click=annotate)
+    except Exception as e:
+        st.error("Qualcosa è anda storto, prova a ricaricare la pagina")
+        print(e)
     
 else:
     
